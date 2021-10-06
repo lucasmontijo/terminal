@@ -9,8 +9,6 @@ int func_cd(char **args);
 int func_help(char **args);
 int func_exit(char **args);
 
-int executarComando(char** argumentos);
-
 //Comandos inclusos no terminal
 char *inclusas_str[] = {
   "cd",
@@ -52,8 +50,8 @@ int func_help(char **args){
 
 int executarTerminal(char **args){
 	if(args[0]==NULL) return 1;
-	for(int i=0; i<num_inclusas(); i++){
-		if(strcmp(args[0], inclusas_str[i]) == 0) return (inclusas_func[i])(args);
+	for(int i=0; i<num_inclusas; i++){
+		if(strcm(args[0], inclusas_str[i]) == 0) return (inclusas_func[i])(args);
 	}
 	return executarComando(args);
 }
@@ -125,7 +123,7 @@ char *lerLinha(void){
 
 	while(1){
 		aux = getchar();
-		if(aux == '\n' || aux == EOF){
+		if(aux == '\n' || c == EOF){
 			buffer[pos] = '\0';
 			return buffer;
 		} else buffer[pos] = aux;
