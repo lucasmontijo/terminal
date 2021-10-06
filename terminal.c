@@ -5,6 +5,47 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+int func_cd(char **args);
+int func_help(char **args);
+int func_exit(char **args);
+
+//Comandos inclusos no terminal
+char *inclusas_str[] = {
+  "cd",
+  "help",
+  "exit"
+};
+
+//funções atreladas aos comandos inclusos no terminal
+int (*inclusas_func[]) (char **) = {
+	&func_cd, &func_help, &func_exit
+};
+
+int num_inclusas() {
+	return sizeof(inclusas_str) / sizeof(char *);
+}
+
+int func_cd(char **args){
+	if(args[1] == NULL) printf("Sem argumento para o cd. \n");
+	else{
+		if(chdir(args[1]) != 0) perror("lsh");
+	}
+	return 1;
+}
+
+int func_exit(char **args){
+	return 0;
+}
+
+int func_help(char **args){
+	printf("Digite o nome dos programas, argumentos e em seguida digite enter.\n");
+	printf("Algumas funcionalidades já estão inclusas no terminal, como as seguintes:\n");
+
+	for(int i=0; i<num_inclusas(); i++){
+		printf("------->%s\n", inclusas_str[i]);
+	}
+}
+
 //função para executar os comandos
 int executarComando(char** argumentos){
 	pid_t pid, wpid;
