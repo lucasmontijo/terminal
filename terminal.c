@@ -1,6 +1,44 @@
 #include<stdlib.h>
 #include<stdio.h>
+#include <string.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <unistd.h>
 
+#define delimitador " \t\r\n\a"
+char **dividirLinha(char *linha){ //onde a linha será dividida em tokens, onde houver um determinado caractere
+	int tamBuffer = 64;
+	int pos = 0;
+	char **tokens = malloc(tamBuffer * sizeof(char*));
+	char* token;
+
+	if(!tokens){
+		printf("Erro de alocacao!\n");
+		exit(EXIT_FAILURE);
+	}
+
+	token = strtok(linha, delimitador);
+
+	while(token != NULL){
+		tokens[pos] = token;
+		pos++;
+
+		//caso a posicao seja maior que a definida no buffer
+		if(pos >= tamBuffer){
+			tamBuffer += 64;
+			tokens = realloc(tokens, tamBuffer*sizeof(char*));
+			if(!tokens){
+				printf("Erro de alocacao. \n");
+				exit(EXIT_FAILURE);
+			}
+		}
+		token = strtok(NULL, delimitador);
+	}
+	tokens[pos] = NULL;
+	return tokens;
+}
+
+//função para ler linhha digitada
 char *lerLinha(void){
 	int tamBuffer = 1024;
 	int pos = 0;
@@ -30,7 +68,6 @@ char *lerLinha(void){
 			}
 		}
 	}
-
 }
 
 void loopTerminal(void){ //loop principal do terminal
