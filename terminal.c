@@ -5,6 +5,26 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+//função para executar os comandos
+int executarComando(char** argumentos){
+	pid_t pid, wpid;
+	int status;
+
+	pid = fork();
+
+	if(pid==0){
+		if(execvp(argumentos[0], argumentos) == -1) perror("lsh"); //quando o exec retorna algo, deu erro
+		exit(EXIT_FAILURE);
+	}else if(pid < 0){ //erro de fork
+		perror("lsh"); //exibe qual foi o erro do fork
+	}else{ //caso dê bom
+		do{
+			wpid = waitpid(pid, &status, WUNTRACED);
+		}while(!WIFEXITED(status) && !WIFSIGNALED(status)); //espera o processo mudar de estado
+	}
+	return 1;
+}
+
 #define delimitador " \t\r\n\a"
 char **dividirLinha(char *linha){ //onde a linha será dividida em tokens, onde houver um determinado caractere
 	int tamBuffer = 64;
