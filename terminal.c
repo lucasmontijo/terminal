@@ -30,7 +30,7 @@ int num_inclusas() {
 int func_cd(char **args){
 	if(args[1] == NULL) printf("Sem argumento para o cd. \n");
 	else{
-		if(chdir(args[1]) != 0) perror("erro");
+		if(chdir(args[1]) != 0) perror("lsh");
 	}
 	return 1;
 }
@@ -66,10 +66,10 @@ int executarComando(char** argumentos){
 	pid = fork();
 
 	if(pid==0){
-		if(execvp(argumentos[0], argumentos) == -1) perror("erro"); //quando o exec retorna algo, deu erro
+		if(execvp(argumentos[0], argumentos) == -1) perror("lsh"); //quando o exec retorna algo, deu erro
 		exit(EXIT_FAILURE);
 	}else if(pid < 0){ //erro de fork
-		perror("erro"); //exibe qual foi o erro do fork
+		perror("lsh"); //exibe qual foi o erro do fork
 	}else{ //caso dê bom
 		do{
 			wpid = waitpid(pid, &status, WUNTRACED);
