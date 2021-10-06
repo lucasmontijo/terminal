@@ -38,7 +38,7 @@ int func_exit(char **args){
 	return 0;
 }
 
-//função ajuda
+//função help ajuda
 int func_help(char **args){
 	printf("Digite o nome dos programas, argumentos e em seguida digite enter.\n");
 	printf("Algumas funcionalidades já estão inclusas no terminal, como as seguintes:\n");
