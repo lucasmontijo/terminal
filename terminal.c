@@ -17,14 +17,14 @@ char *inclusas_str[] = {
 };
 
 //funções atreladas aos comandos inclusos no terminal
-int (*inclusas_func[]) (char **) = {
-	&func_cd, &func_help, &func_exit
-};
+int (*inclusas_func[]) (char **) = {&func_cd, &func_help, &func_exit};
 
+//numero de funcionalidades inclusas no terminal 
 int num_inclusas() {
 	return sizeof(inclusas_str) / sizeof(char *);
 }
 
+//função cd para navegar em diretórios
 int func_cd(char **args){
 	if(args[1] == NULL) printf("Sem argumento para o cd. \n");
 	else{
@@ -33,10 +33,12 @@ int func_cd(char **args){
 	return 1;
 }
 
+//função para sair do terminal
 int func_exit(char **args){
 	return 0;
 }
 
+//função ajuda
 int func_help(char **args){
 	printf("Digite o nome dos programas, argumentos e em seguida digite enter.\n");
 	printf("Algumas funcionalidades já estão inclusas no terminal, como as seguintes:\n");
@@ -44,6 +46,14 @@ int func_help(char **args){
 	for(int i=0; i<num_inclusas(); i++){
 		printf("------->%s\n", inclusas_str[i]);
 	}
+}
+
+int executarTerminal(char **args){
+	if(args[0]==NULL) return 1;
+	for(int i=0; i<num_inclusas; i++){
+		if(strcm(args[0], inclusas_str[i]) == 0) return (inclusas_func[i])(args);
+	}
+	return executarComando(args);
 }
 
 //função para executar os comandos
@@ -140,7 +150,7 @@ void loopTerminal(void){ //loop principal do terminal
 		printf("-----> ");
 		linha = lerLinha();
 		argumentos = dividirLinha(linha);
-		status = executarComando(argumentos);
+		status = executarTerminal(argumentos);
 
 		free(linha);
 		free(argumentos);
