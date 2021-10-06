@@ -20,7 +20,15 @@ char *lerLinha(void){
 		} else buffer[pos] = aux;
 		pos++;
 
-		
+		//Caso o tamanho do buffer seja insuficiente
+		if(pos >= tamBuffer){
+			tamBuffer += 1024;
+			buffer = realloc(buffer, tamBuffer);
+			if(!buffer){
+				printf("Erro de alocacao!\n");
+				exit(EXIT_FAILURE);
+			}
+		}
 	}
 
 }
