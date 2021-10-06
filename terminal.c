@@ -9,6 +9,8 @@ int func_cd(char **args);
 int func_help(char **args);
 int func_exit(char **args);
 
+int executarComando(char** argumentos);
+
 //Comandos inclusos no terminal
 char *inclusas_str[] = {
   "cd",
@@ -28,7 +30,7 @@ int num_inclusas() {
 int func_cd(char **args){
 	if(args[1] == NULL) printf("Sem argumento para o cd. \n");
 	else{
-		if(chdir(args[1]) != 0) perror("lsh");
+		if(chdir(args[1]) != 0) perror("erro");
 	}
 	return 1;
 }
@@ -38,7 +40,7 @@ int func_exit(char **args){
 	return 0;
 }
 
-//função help ajuda
+//função ajuda
 int func_help(char **args){
 	printf("Digite o nome dos programas, argumentos e em seguida digite enter.\n");
 	printf("Algumas funcionalidades já estão inclusas no terminal, como as seguintes:\n");
@@ -50,8 +52,8 @@ int func_help(char **args){
 
 int executarTerminal(char **args){
 	if(args[0]==NULL) return 1;
-	for(int i=0; i<num_inclusas; i++){
-		if(strcm(args[0], inclusas_str[i]) == 0) return (inclusas_func[i])(args);
+	for(int i=0; i<num_inclusas(); i++){
+		if(strcmp(args[0], inclusas_str[i]) == 0) return (inclusas_func[i])(args);
 	}
 	return executarComando(args);
 }
@@ -64,10 +66,10 @@ int executarComando(char** argumentos){
 	pid = fork();
 
 	if(pid==0){
-		if(execvp(argumentos[0], argumentos) == -1) perror("lsh"); //quando o exec retorna algo, deu erro
+		if(execvp(argumentos[0], argumentos) == -1) perror("erro"); //quando o exec retorna algo, deu erro
 		exit(EXIT_FAILURE);
 	}else if(pid < 0){ //erro de fork
-		perror("lsh"); //exibe qual foi o erro do fork
+		perror("erro"); //exibe qual foi o erro do fork
 	}else{ //caso dê bom
 		do{
 			wpid = waitpid(pid, &status, WUNTRACED);
@@ -123,7 +125,7 @@ char *lerLinha(void){
 
 	while(1){
 		aux = getchar();
-		if(aux == '\n' || c == EOF){
+		if(aux == '\n' || aux == EOF){
 			buffer[pos] = '\0';
 			return buffer;
 		} else buffer[pos] = aux;
